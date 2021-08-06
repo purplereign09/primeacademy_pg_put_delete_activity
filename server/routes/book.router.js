@@ -16,7 +16,7 @@ app.use( bodyParser.json() );
 app.use(express.static('server/public'));
 
 
-
+//model DELETE and PUT after these
 // Get all books
 router.get('/', (req, res) => {
   let queryText = 'SELECT * FROM "books" ORDER BY "title";';
@@ -65,15 +65,18 @@ router.put('/:id',  (req, res) => {
     });
 });
 
-router.delete('/:id',  (req, res) => {
-  let booksToDelete = req.params.id
-  console.log(`Deleted book`, booksToDelete);
 
-  let queryText = `DELETE FROM "books" ("author", "title")
-                   VALUES ($1, $2);`;
-  pool.query(queryText, [newBook.author, newBook.title])
-    .then(result => {
-      res.sendStatus(201);
+router.delete('/:id',  (req, res) => {
+  let booksToDeleteid = req.params.id
+  console.log(`Deleted book`, booksToDelete);
+//adding parameterized query text to protect from hackers
+  let queryText = `DELETE FROM "books" WHERE "id" = $1
+                   ;`;
+  //adding real query text to tell db what to do
+  let sqlParams = [booksToDeleteid];
+  pool.query(queryText, sqlParams)
+    .then(dbRes) => {
+      res.sendStatus(200);
     })
     .catch(error => {
       console.log(`Error adding new book`, error);
