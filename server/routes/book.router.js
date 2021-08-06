@@ -16,11 +16,12 @@ app.use( bodyParser.json() );
 app.use(express.static('server/public'));
 
 
-//model DELETE and PUT after these
+//model DELETE and PUT after these!
 // Get all books
-router.get('/', (req, res) => {
+router.get('/:id', (req, res) => {
   let queryText = 'SELECT * FROM "books" ORDER BY "title";';
-  pool.query(queryText).then(result => {
+  pool.query(queryText)
+  .then(result => {
     // Sends back the results in an object
     res.send(result.rows);
   })
@@ -32,7 +33,9 @@ router.get('/', (req, res) => {
 
 // Adds a new book to the list of awesome reads
 // Request body must be a book object with a title and author.
-router.post('/',  (req, res) => {
+// Req Body = book object
+// Book object = 'title', 'author'
+router.post('/:id',  (req, res) => {
   let newBook = req.body;
   console.log(`Adding book`, newBook);
 
@@ -49,14 +52,13 @@ router.post('/',  (req, res) => {
 });
 
 router.put('/:id',  (req, res) => {
-  let newBook = req.body;
-  console.log(`Adding book`, newBook);
-  console.log('id is', req.params.id);
-
+  let updatedBook = req.params.id;
+  console.log(`Adding book`, updatedBook);
+  //adding parameterized query text to protect from anon
   let queryText = `PUT AND UPDATE "books" ("author", "title")
                    VALUES ($1, $2);`;
-  pool.query(queryText, [newBook.author, newBook.title])
-    .then(result => {
+  pool.query(queryText, [newBook.author, newBook.title, newBook.id])
+    .then((dbRes) => {
       res.sendStatus(201);
     })
     .catch(error => {
@@ -67,15 +69,15 @@ router.put('/:id',  (req, res) => {
 
 
 router.delete('/:id',  (req, res) => {
-  let booksToDeleteid = req.params.id
-  console.log(`Deleted book`, booksToDelete);
+  let idToDelete = req.params.id;
+  console.log(`Deleted book`, idToDelete);
 //adding parameterized query text to protect from hackers
-  let queryText = `DELETE FROM "books" WHERE "id" = $1
-                   ;`;
+  let queryText = `DELETE FROM "books" WHERE ("author", "title", "id" = $1;)
+            `;
   //adding real query text to tell db what to do
-  let sqlParams = [booksToDeleteid];
+  const sqlParams = [idToDelete];
   pool.query(queryText, sqlParams)
-    .then(dbRes) => {
+    .then((dbRes) => {
       res.sendStatus(200);
     })
     .catch(error => {
