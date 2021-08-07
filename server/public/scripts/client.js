@@ -39,7 +39,9 @@ function handleSubmit() {
   book.author = $('#author').val();
   book.title = $('#title').val();
   addBook(book);
-}
+  book.author = $('#author').val('');
+  book.title = $('#title').val('');
+};
 
 // adds a book to the database
 function addBook(bookToAdd) {
@@ -77,7 +79,11 @@ function refreshBooks() {
 //if not, disable the checkbox attribute. No checkbox for you
 
 function updateBooks(){
-
+  if('.bookRead' === true){
+    $('input type="checkbox"').prop('checked', true);
+  } else {
+    $('input type="checkbox"').prop('checked', false);
+  };
 $.ajax({
     method: 'PUT',
     url: `/books/${booksId}`,
@@ -88,7 +94,7 @@ $.ajax({
   .catch( function(error) {
     alert('Error on vote on song', error);
   })
-}
+};
 
 // Displays an array of books to the DOM
 function renderBooks(books) {
@@ -103,7 +109,7 @@ function renderBooks(books) {
     <tr data-id="${book.id}">
         <td>${book.title}</td>
         <td>${book.author}</td>
-        <td>${book.isRead}</td>
+        <td class="bookRead">${book.isRead}</td>
         <td><button class="deleteBttn">X</button></td>
         <td><input type="checkbox" id="markAsRead" 
         <label>Has Been Read</label><br></td>
