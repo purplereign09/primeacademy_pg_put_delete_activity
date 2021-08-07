@@ -8,6 +8,7 @@ $(document).ready(function(){
 function addClickHandlers() {
   $('#submitBtn').on('click', handleSubmit);
   $('#bookShelf').on('click', '.deleteBttn', deleteRow); 
+  $('#markAsRead').on('click', updateBooks);
   // TODO - Add code for edit & delete buttons
 }
 
@@ -66,17 +67,28 @@ function refreshBooks() {
   }).catch(function(error){
     console.log('error in GET', error);
   });
+}
+
+//add a button that marks as 'read' if boolean condition 
+//evaluates to 'true' 
+// pass book id as parameter of function
+//if database 'isRead' boolean value is true,
+//let the false default of the checkbox turn off, in turn, 'check'
+//if not, disable the checkbox attribute. No checkbox for you
+
+function updateBooks(){
+
 $.ajax({
     method: 'PUT',
     url: `/books/${booksId}`,
   })
   .then( function(response) {
-    getAllSongs();
+  console.log(response);  
   })
   .catch( function(error) {
     alert('Error on vote on song', error);
   })
-
+}
 
 // Displays an array of books to the DOM
 function renderBooks(books) {
@@ -91,7 +103,10 @@ function renderBooks(books) {
     <tr data-id="${book.id}">
         <td>${book.title}</td>
         <td>${book.author}</td>
+        <td>${book.isRead}</td>
         <td><button class="deleteBttn">X</button></td>
+        <td><input type="checkbox" id="markAsRead" 
+        <label>Has Been Read</label><br></td>
       </tr>
     `);
   }

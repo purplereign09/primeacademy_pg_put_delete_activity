@@ -7,18 +7,9 @@ const pool = require('../modules/pool.js');
 
 
 
-// Setup express (same as before)
-const app = express();
-
-// Setup body parser - to translating request body into JSON
-app.use( bodyParser.urlencoded({ extended: true }));
-app.use( bodyParser.json() );
-app.use(express.static('server/public'));
-
-
 //model DELETE and PUT after these!
 // Get all books
-router.get('/:id', (req, res) => {
+router.get('/', (req, res) => {
   let queryText = 'SELECT * FROM "books" ORDER BY "title";';
   pool.query(queryText)
   .then(result => {
@@ -35,7 +26,7 @@ router.get('/:id', (req, res) => {
 // Request body must be a book object with a title and author.
 // Req Body = book object
 // Book object = 'title', 'author'
-router.post('/:id',  (req, res) => {
+router.post('/',  (req, res) => {
   let newBook = req.body;
   console.log(`Adding book`, newBook);
 
@@ -51,13 +42,13 @@ router.post('/:id',  (req, res) => {
     });
 });
 
-router.put('/:id',  (req, res) => {
-  let updatedBook = req.params.id;
+router.put('/',  (req, res) => {
+  // let updatedBook = req.params.id;
   console.log(`Adding book`, updatedBook);
   //adding parameterized query text to protect from anon
-  let queryText = `PUT AND UPDATE "books" ("author", "title")
-                   VALUES ($1, $2);`;
-  pool.query(queryText, [newBook.author, newBook.title, newBook.id])
+  let queryText = `UPDATE "books" ("author", "title", "isRead")
+                   VALUES ($1, $2, $3);`;
+  pool.query(queryText, [newBook.author, newBook.title, newBook.isRead])
     .then((dbRes) => {
       res.sendStatus(201);
     })
@@ -72,7 +63,7 @@ router.delete('/:id',  (req, res) => {
   let idToDelete = req.params.id;
   console.log(`Deleted book`, idToDelete);
 //adding parameterized query text to protect from hackers
-  let queryText = `DELETE FROM "books" WHERE ("author", "title", "id" = $1;)
+  let queryText = `DELETE FROM "books" WHERE "id" = $1;
             `;
   //adding real query text to tell db what to do
   const sqlParams = [idToDelete];
