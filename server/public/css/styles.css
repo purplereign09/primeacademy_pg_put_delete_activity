@@ -1,11 +1,11 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 header {
-  background-color: brown;
-  padding: 1em;
+  background-color: rgb(164, 243, 243);
+  padding: 3em;
   margin-bottom: 1em;
 }
 
@@ -19,8 +19,8 @@ main {
 }
 
 section {
-  background-color: linen;
-  padding: .5em;
+  background-color: rgb(233, 250, 230);
+  padding: 0.5em;
   margin-bottom: 1em;
 }
 
@@ -28,4 +28,6 @@ th {
   text-align: left;
 }
 
-
+button.deleteBttn {
+  color: red;
+}

@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../modules/pool.js');
 
 
-//Setup PG to connect database
+
 
 
 

@@ -77,7 +77,7 @@ function refreshBooks() {
 //if database 'isRead' boolean value is true,
 //let the false default of the checkbox turn off, in turn, 'check'
 //if not, disable the checkbox attribute. No checkbox for you
-
+//I tried dropping the 'DEFAULT' value in PORTICO//it didn't work
 function updateBooks(){
   if('.bookRead' === true){
     $('input type="checkbox"').prop('checked', true);
@@ -109,10 +109,13 @@ function renderBooks(books) {
     <tr data-id="${book.id}">
         <td>${book.title}</td>
         <td>${book.author}</td>
-        <td class="bookRead">${book.isRead}</td>
         <td><button class="deleteBttn">X</button></td>
-        <td><input type="checkbox" id="markAsRead" 
-        <label>Has Been Read</label><br></td>
+        <td>
+          <input type="checkbox" 
+                 id="markAsRead" 
+          <label>Has Been Read</label>
+          <td class="bookRead">${book.isRead}</td>
+        </td>
       </tr>
     `);
   }
